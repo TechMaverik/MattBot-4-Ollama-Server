@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mind Mate - Mental Wellbeing</title>
+
+  <!-- Google Fonts for Aesthetic Look -->
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --pastel-purple: #bda5ec;
+      --pastel-pink: #e494a3;
+      --pastel-blue: #7ec1e0;
+      --pastel-green: #c2f0c2;
+      --pastel-yellow: #f6e9a7;
+      --card-bg: #f2a3a3cc;
+      --text-muted: #3e0707;
+    }
+
+    body {
+      font-family: 'Rubik', sans-serif;
+      background: linear-gradient(135deg, #fdf6ff, #f0f8ff);
+      color: #333;
+      padding-top: 80px;
+    }
+
+    /* NAV */
+    .navbar-custom {
+      background: linear-gradient(90deg, var(--pastel-purple), var(--pastel-pink));
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      font-family: 'Pacifico', cursive;
+      color: #fff;
+      font-size: 1.4rem;
+    }
+
+    /* BUTTONS */
+    .btn-primary-custom {
+      background: linear-gradient(90deg, var(--pastel-purple), var(--pastel-pink));
+      border: 0;
+      color: #fff;
+      border-radius: 0.8rem;
+      padding: 0.5rem 1.2rem;
+      font-weight: 500;
+      transition: transform 0.25s;
+    }
+
+    .btn-primary-custom:hover {
+      transform: scale(1.05);
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 4rem 1rem;
+      display: none;
+      transition: all 0.5s ease;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    /* HOME CARDS */
+    .feature-card {
+      border-radius: 1.2rem;
+      padding: 2rem 1rem;
+      background: var(--card-bg);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+      background: linear-gradient(135deg, var(--pastel-pink), var(--pastel-purple), var(--pastel-blue));
+      color: #fff;
+    }
+
+    .feature-card h5 {
+      font-weight: 700;
+      margin-top: 1rem;
+    }
+
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* CHATBOT */
+    .chatbot-container {
+      height: 56vh;
+      display: flex;
+      flex-direction: column;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+      background: var(--card-bg);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .chat-header {
+      background: linear-gradient(90deg, var(--pastel-purple), var(--pastel-pink));
+      color: #fff;
+      padding: 1rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .chat-body {
+      flex: 1;
+      padding: 1rem;
+      overflow: auto;
+      background: repeating-linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0px, rgba(255, 255, 255, 0.08) 40px, transparent 40px, transparent 80px);
+    }
+
+    .msg {
+      display: inline-block;
+      padding: .6rem .9rem;
+      border-radius: .8rem;
+      margin-bottom: .6rem;
+      max-width: 78%;
+      line-height: 1.25;
+    }
+
+    .msg.user {
+      background: linear-gradient(90deg, var(--pastel-purple), var(--pastel-pink));
+      color: white;
+      float: right;
+      border-bottom-right-radius: 0.25rem;
+    }
+
+    .msg.bot {
+      background: rgba(108, 99, 255, 0.06);
+      color: #111;
+      float: left;
+      border-bottom-left-radius: 0.25rem;
+    }
+
+    .chat-input {
+      display: flex;
+      gap: .6rem;
+      padding: .75rem;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      background: linear-gradient(90deg, #fff, #fffefa);
+    }
+
+    /* JOURNAL */
+    .form-control {
+      border-radius: 0.6rem;
+      background: #fffafa;
+    }
+
+    /* JOURNAL ENTRIES */
+    #journalEntries .card {
+      background: linear-gradient(135deg, var(--pastel-yellow), var(--pastel-green), #fffefc);
+    }
+
+    /* BREATH */
+    .timer-display {
+      font-size: 3rem;
+      font-weight: 500;
+      color: var(--pastel-purple);
+    }
+
+    .breathe-indicator {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+
+    .breath-circle {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      transition: transform 1s, box-shadow .35s;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      background: radial-gradient(circle at 35% 30%, #fff, var(--pastel-blue) 70%);
+    }
+
+    .breath-circle.shrink {
+      transform: scale(0.6);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .breath-circle.grow {
+      transform: scale(1.12);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    footer {
+      padding: 2rem 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      text-align: center;
+      color: #777;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .breath-circle {
+        width: 160px;
+        height: 160px;
+      }
+
+      .timer-display {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg fixed-top navbar-custom">
+    <div class="container">
+      <a class="navbar-brand brand" href="#">Mind Mate</a>
+    </div>
+  </nav>
+
+  <!-- HOME PAGE -->
+  <section id="home-page" class="active container text-center">
+
+    <h1 class="mb-3" style="font-family:'Pacifico', cursive; font-size:2.5rem; color:var(--pastel-purple);">Welcome to Mind
+      Mate</h1>
+
+    <p style="font-size:1.05rem; color:var(--text-muted); max-width:600px; margin:0 auto 2rem;">
+      Mind Mate is your digital companion for mental wellbeing. Explore journaling, guided breathing, and an interactive
+      chatbot to help you stay calm, focused, and mindful every day.
+    </p>
+
+    <div class="row justify-content-center g-4">
+
+      <div class="col-md-3">
+        <div class="feature-card" onclick="navigateTo('journaling-page')">
+          <div style="font-size:36px">📔</div>
+          <h5>Journaling</h5>
+          <p>Express your thoughts & track your emotions.</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="feature-card" onclick="window.location.href='/chat'">
+          <div style="font-size:36px">💬</div>
+          <h5>Mind Mate Chatbot</h5>
+          <p>Chat and reflect (UI-only interface).</p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="feature-card" onclick="navigateTo('breathease-page')">
+          <div style="font-size:36px">🌬️</div>
+          <h5>BreathEase</h5>
+          <p>Guided breathing to calm your mind and body.</p>
+        </div>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- JOURNAL PAGE -->
+  <section id="journaling-page" class="container">
+
+    <button class="btn btn-outline-secondary mb-3" onclick="navigateTo('home-page')">&larr; Back to Home</button>
+
+    <h2 style="color:var(--pastel-purple); font-weight:700">Journaling</h2>
+
+    <p style="color:var(--text-muted);">Write your thoughts freely. Stored locally in your browser.</p>
+
+    <div class="card p-4 mb-3 border-0 shadow-sm">
+
+      <div class="mb-3">
+        <label class="form-label small-muted">Your Mood:</label>
+        <input id="feelingInput" class="form-control" placeholder="e.g., Calm, Stressed, Happy...">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label small-muted">Your Thoughts:</label>
+        <textarea id="journalTextarea" class="form-control" rows="6" placeholder="Write anything here..."></textarea>
+      </div>
+
+      <div class="mb-3">
+        <button id="clearJournal" class="btn btn-outline-secondary">Clear</button>
+        <button id="saveJournal" class="btn btn-primary-custom ms-2">Save Entry</button>
+        <button id="toggleJournal" class="btn btn-outline-primary ms-2">Hide Entries</button>
+      </div>
+
+    </div>
+
+    <!-- PAST ENTRIES -->
+    <div id="journalEntries" class="mb-3"></div>
+
+  </section>
+
+  <!-- CHATBOT PAGE -->
+  <section id="chatbot-page" class="container mt-4">
+    <h2 style="color:var(--pastel-purple); font-weight:700">Mind Mate Chatbot</h2>
+    <p style="color:var(--text-muted);">Talk to your digital companion for mental clarity.</p>
+
+    <div class="chatbot-container">
+      <div class="chat-header">Mind Mate</div>
+      <div id="chatBody" class="chat-body">
+        {% if messages %}
+        {% for msg in messages %}
+        <div class="msg {{ msg.sender }}">{{ msg.text }}</div>
+        {% endfor %}
+        {% else %}
+        <div class="msg bot">Hi! I'm your Mind Mate. How are you feeling today?</div>
+        {% endif %}
+      </div>
+
+      <form method="POST" class="chat-input">
+        <input name="message" id="chatInput" type="text" class="form-control" placeholder="Type your message..." required>
+        <button type="submit" id="sendBtn" class="btn btn-primary-custom">Send</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- BREATH PAGE -->
+  <section id="breathease-page" class="container text-center">
+
+    <button class="btn btn-outline-secondary mb-3" onclick="navigateTo('home-page')">&larr; Back to Home</button>
+
+    <h2 style="color:var(--pastel-purple); font-weight:700">BreathEase</h2>
+
+    <p style="color:var(--text-muted);">Practice mindful breathing for calm & clarity</p>
+
+    <div class="mb-4 d-flex justify-content-center gap-2">
+
+      <button class="btn btn-sm duration-button btn-outline" data-duration="60">1 min</button>
+      <button class="btn btn-sm duration-button btn-outline" data-duration="180">3 min</button>
+      <button class="btn btn-sm duration-button btn-outline" data-duration="300">5 min</button>
+
+    </div>
+
+    <div class="card d-inline-block p-4 shadow-sm border-0" style="min-width:320px;">
+
+      <div class="breath-circle grow" id="breathCircle">
+        <div id="circleInner" style="font-size:22px; color:var(--pastel-purple); font-weight:800">Breathe</div>
+      </div>
+
+      <div class="timer-display" id="breathTimer">1:00</div>
+
+      <div class="breathe-indicator" id="breathIndicator">Breathe In...</div>
+
+      <div class="mt-3 d-flex justify-content-center gap-2">
+        <button id="startBreath" class="btn btn-primary-custom">Start</button>
+        <button id="pauseBreath" class="btn btn-outline-secondary">Pause</button>
+        <button id="resetBreath" class="btn btn-outline-secondary">Reset</button>
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    &copy; AI & Robotics Lab DPS Indirapuram
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // PAGE NAVIGATION
+    function navigateTo(pageId) {
+      document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+      document.getElementById(pageId).classList.add('active');
+    }
+
+    // JOURNAL LOGIC
+    (function () {
+      const saveBtn = document.getElementById('saveJournal');
+      const clearBtn = document.getElementById('clearJournal');
+      const feelingInput = document.getElementById('feelingInput');
+      const textarea = document.getElementById('journalTextarea');
+      const entriesContainer = document.getElementById('journalEntries');
+      const toggleBtn = document.getElementById('toggleJournal');
+      const STORAGE_KEY = 'mindmate_journal_v2';
+      let entriesHidden = false;
+
+      function loadEntries() {
+        entriesContainer.innerHTML = '';
+        const entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]').reverse();
+        entries.forEach((entry, index) => {
+          const entryEl = document.createElement('div');
+          entryEl.className = 'card mb-2 p-3 border-0 shadow-sm';
+          entryEl.style.background = 'linear-gradient(135deg, var(--pastel-yellow), var(--pastel-green), #fffefc)';
+          entryEl.innerHTML = `<strong>${entry.date}</strong> | Mood: ${entry.feeling || 'N/A'}
+            <p style="margin-top:0.3rem;">${entry.text}</p>
+            <button class="btn btn-sm btn-outline-danger mt-2" onclick="deleteEntry(${index})">Delete</button>`;
+          entriesContainer.appendChild(entryEl);
+        });
+      }
+
+      saveBtn.addEventListener('click', () => {
+        const text = textarea.value.trim();
+        const feeling = feelingInput.value.trim();
+        if (!text) { if (!confirm('You are about to save an empty entry. Continue?')) return; }
+        const entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const today = new Date();
+        const formattedDate = today.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+        entries.push({ date: formattedDate, feeling, text });
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+        textarea.value = ''; feelingInput.value = '';
+        loadEntries();
+      });
+
+      clearBtn.addEventListener('click', () => {
+        if (confirm('Clear the current input?')) {
+          textarea.value = ''; feelingInput.value = '';
+        }
+      });
+
+      toggleBtn.addEventListener('click', () => {
+        entriesHidden = !entriesHidden;
+        entriesContainer.style.display = entriesHidden ? 'none' : 'block';
+        toggleBtn.textContent = entriesHidden ? 'Show Entries' : 'Hide Entries';
+      });
+
+      window.deleteEntry = function (index) {
+        const entries = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        if (confirm('Are you sure you want to delete this entry?')) {
+          entries.splice(entries.length - 1 - index, 1); // reverse index since displayed entries are reversed
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+          loadEntries();
+        }
+      }
+
+      loadEntries();
+    })();
+
+    // CHATBOT UI
+    (function () {
+      const sendBtn = document.getElementById('sendBtn');
+      const chatInput = document.getElementById('chatInput');
+      if (sendBtn) {
+        sendBtn.addEventListener('click', e => {
+          e.preventDefault();
+          const original = sendBtn.innerHTML;
+          sendBtn.innerHTML = 'Disabled'; sendBtn.disabled = true;
+          setTimeout(() => { sendBtn.innerHTML = original; sendBtn.disabled = false; }, 900);
+        });
+      }
+      if (chatInput) {
+        chatInput.addEventListener('keydown', e => { if (e.key === 'Enter') e.preventDefault(); });
+      }
+    })();
+
+    // BREATH TIMER
+    (function () {
+      let duration = 60, remaining = 60, intervalId = null, state = 'idle';
+      const timerEl = document.getElementById('breathTimer');
+      const indicatorEl = document.getElementById('breathIndicator');
+      const circle = document.getElementById('breathCircle');
+      const durationButtons = document.querySelectorAll('.duration-button');
+
+      durationButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          durationButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          duration = Number(btn.dataset.duration);
+          resetTimer();
+        });
+      });
+
+      (function initDur() { const first = document.querySelector('.duration-button'); if (first) first.classList.add('active'); })();
+
+      function formatTime(s) { const mm = Math.floor(s / 60); const ss = s % 60; return mm + ':' + (ss < 10 ? '0' + ss : ss); }
+      function updateDisplay() { timerEl.textContent = formatTime(remaining); }
+
+      function startTimer() {
+        if (state === 'running') return;
+        if (remaining <= 0) remaining = duration;
+        state = 'running';
+        intervalId = setInterval(() => {
+          remaining--; updateDisplay(); updateBreathPhase();
+          if (remaining <= 0) {
+            clearInterval(intervalId); intervalId = null; state = 'idle'; remaining = 0; updateDisplay();
+            indicatorEl.textContent = 'Session complete — well done.';
+            circle.classList.remove('grow', 'shrink');
+            circle.animate([{ transform: 'scale(1)' }, { transform: 'scale(1.06)' }, { transform: 'scale(1)' }], { duration: 800 });
+          }
+        }, 1000);
+      }
+
+      function pauseTimer() { if (intervalId) clearInterval(intervalId); intervalId = null; state = 'paused'; }
+      function resetTimer() {
+        if (intervalId) clearInterval(intervalId);
+        intervalId = null; state = 'idle'; remaining = duration; updateDisplay();
+        indicatorEl.textContent = 'Breathe In...';
+        circle.classList.remove('grow', 'shrink');
+        circle.classList.add('grow');
+      }
+
+      function updateBreathPhase() {
+        const elapsed = duration - remaining;
+        const cycle = 8;
+        const pos = elapsed % cycle;
+        if (pos < Math.ceil(cycle * 0.45)) {
+          indicatorEl.textContent = 'Breathe In...';
+          circle.classList.remove('shrink');
+          circle.classList.add('grow');
+        } else {
+          indicatorEl.textContent = 'Breathe Out...';
+          circle.classList.remove('grow');
+          circle.classList.add('shrink');
+        }
+      }
+
+      document.getElementById('startBreath').addEventListener('click', () => { if (state === 'paused' || state === 'idle') { startTimer(); updateBreathPhase(); } });
+      document.getElementById('pauseBreath').addEventListener('click', () => { if (state === 'running') pauseTimer(); });
+      document.getElementById('resetBreath').addEventListener('click', resetTimer);
+
+      remaining = duration; updateDisplay(); indicatorEl.textContent = 'Breathe In...'; circle.classList.add('grow');
+    })();
+
+  </script>
+
+</body>
+
+</html>
